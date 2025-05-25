@@ -1,6 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Elements
   const playersContainer = document.getElementById('players-container');
   const playerCount = document.getElementById('player-count');
   const gameSearch = document.getElementById('game-search');
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const profileFormContainer = document.getElementById('profile-form-container');
   const gameProfileForm = document.getElementById('game-profile-form');
   
-  // Sample data for game partners
   const mockPlayers = [
     {
       id: 'player-1',
@@ -66,20 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
       bio: 'Video game enthusiast who enjoys both competitive and cooperative gameplay. Voice chat preferred.'
     }
   ];
-  
-  // Load players from localStorage or use mock data
+
   let players = getFromLocalStorage(STORAGE_KEYS.GAME_PARTNERS, mockPlayers);
-  
-  // Display all players on page load
   displayPlayers(players);
   
-  // Check for user profile
   const userProfile = getFromLocalStorage(STORAGE_KEYS.GAME_PROFILE, null);
   if (userProfile) {
     populateProfileForm(userProfile);
   }
   
-  // Toggle profile form
   toggleProfileFormBtn.addEventListener('click', () => {
     if (profileFormContainer.style.display === 'none' || !profileFormContainer.style.display) {
       profileFormContainer.style.display = 'block';
@@ -89,8 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
       toggleProfileFormBtn.textContent = userProfile ? 'Edit Profile' : 'Create Profile';
     }
   });
-  
-  // Profile form submission
+
   gameProfileForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -99,13 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const skill = document.getElementById('profile-skill').value;
     const bio = document.getElementById('profile-bio').value;
     
-    // Get selected availability
     const availability = [];
     document.querySelectorAll('input[name="profile-availability"]:checked').forEach(checkbox => {
       availability.push(checkbox.value);
     });
     
-    // Create profile object
     const profile = {
       id: userProfile ? userProfile.id : 'player-' + Date.now(),
       name,
@@ -117,35 +107,28 @@ document.addEventListener('DOMContentLoaded', () => {
       bio
     };
     
-    // Save profile to localStorage
     saveToLocalStorage(STORAGE_KEYS.GAME_PROFILE, profile);
     
-    // Add to players array if not already there
     if (!userProfile) {
       players = [profile, ...players];
       saveToLocalStorage(STORAGE_KEYS.GAME_PARTNERS, players);
     } else {
-      // Update existing profile
       players = players.map(player => player.id === profile.id ? profile : player);
       saveToLocalStorage(STORAGE_KEYS.GAME_PARTNERS, players);
     }
     
-    // Update UI
     displayPlayers(players);
     profileFormContainer.style.display = 'none';
     toggleProfileFormBtn.textContent = 'Edit Profile';
     
-    // Show success message
     showToast('Profile saved successfully!', 'success');
   });
   
-  // Apply filters
   applyFiltersBtn.addEventListener('click', () => {
     const searchTerm = gameSearch.value.toLowerCase();
     const selectedType = gameType.value;
     const selectedSkill = skillLevel.value;
     
-    // Get selected availability
     const selectedAvailability = [];
     availabilityCheckboxes.forEach(checkbox => {
       if (checkbox.checked) {
@@ -153,23 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
-    // Filter players
     const filteredPlayers = players.filter(player => {
-      // Search term filter
       const matchesSearch = searchTerm === '' || 
         player.name.toLowerCase().includes(searchTerm) ||
         player.games.some(game => game.toLowerCase().includes(searchTerm)) ||
         player.bio.toLowerCase().includes(searchTerm);
       
-      // Game type filter
       const matchesType = selectedType === 'all' || 
         player.gameTypes.some(type => type === selectedType);
       
-      // Skill level filter
       const matchesSkill = selectedSkill === 'all' || 
         player.skillLevel === selectedSkill;
       
-      // Availability filter
       const matchesAvailability = selectedAvailability.length === 0 ||
         player.availability.some(avail => selectedAvailability.includes(avail));
       
@@ -179,13 +157,11 @@ document.addEventListener('DOMContentLoaded', () => {
     displayPlayers(filteredPlayers);
   });
   
-  // Reset filters
   resetFiltersBtn.addEventListener('click', () => {
     gameSearch.value = '';
     gameType.value = 'all';
     skillLevel.value = 'all';
     
-    // Uncheck all availability checkboxes
     availabilityCheckboxes.forEach(checkbox => {
       checkbox.checked = false;
     });
@@ -193,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
     displayPlayers(players);
   });
   
-  // Display players function
   function displayPlayers(playersToDisplay) {
     playerCount.textContent = `${playersToDisplay.length} ${playersToDisplay.length === 1 ? 'Player' : 'Players'}`;
     
@@ -209,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     playersContainer.innerHTML = playersToDisplay.map(player => {
-      // Format availability for display
       const availabilityIcons = {
         'weekday-day': 'sun',
         'weekday-evening': 'moon',
@@ -284,7 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('');
   }
   
-  // Global functions for player interactions
   window.connectWithPlayer = function(playerId) {
     const player = players.find(p => p.id === playerId);
     if (player) {
@@ -299,20 +272,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   
-  // Helper function to populate profile form
   function populateProfileForm(profile) {
     document.getElementById('profile-name').value = profile.name || '';
     document.getElementById('profile-games').value = profile.games ? profile.games.join(', ') : '';
     document.getElementById('profile-skill').value = profile.skillLevel || 'beginner';
     document.getElementById('profile-bio').value = profile.bio || '';
     
-    // Set availability checkboxes
     document.querySelectorAll('input[name="profile-availability"]').forEach(checkbox => {
       checkbox.checked = profile.availability ? profile.availability.includes(checkbox.value) : false;
     });
   }
   
-  // Helper function to guess game type
   function guessGameType(game) {
     const videoGames = ['fifa', 'call of duty', 'fortnite', 'mario kart', 'minecraft', 'among us'];
     const boardGames = ['chess', 'monopoly', 'scrabble', 'settlers of catan', 'pandemic'];
