@@ -1,6 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Elements
   const searchInput = document.getElementById('search-input');
   const addItemBtn = document.getElementById('add-item-btn');
   const addItemForm = document.getElementById('add-item-form');
@@ -10,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const itemsCount = document.getElementById('items-count');
   const resetFiltersBtn = document.getElementById('reset-filters');
   
-  // Filter elements
   const filterCategory = document.getElementById('filter-category');
   const filterCondition = document.getElementById('filter-condition');
   const priceMinSlider = document.getElementById('price-min');
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const maxPriceEl = document.getElementById('max-price');
   const availableOnlyCheckbox = document.getElementById('available-only');
   
-  // Sample data for rental items
   const mockItems = [
     {
       id: 'item-1',
@@ -75,13 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
   
-  // Load items from localStorage or use mock data
   let items = getFromLocalStorage(STORAGE_KEYS.RENT_ITEMS, mockItems);
   
-  // Display all items on page load
   displayItems(items);
   
-  // Toggle add item form
   addItemBtn.addEventListener('click', () => {
     addItemForm.style.display = 'block';
     addItemBtn.style.display = 'none';
@@ -93,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
     itemForm.reset();
   });
   
-  // Form submission
   itemForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -111,35 +104,27 @@ document.addEventListener('DOMContentLoaded', () => {
       createdAt: new Date()
     };
     
-    // Add to items array
     items = [newItem, ...items];
     
-    // Save to localStorage
     saveToLocalStorage(STORAGE_KEYS.RENT_ITEMS, items);
     
-    // Update UI
     displayItems(items);
     
-    // Hide form and reset
     addItemForm.style.display = 'none';
     addItemBtn.style.display = 'block';
     itemForm.reset();
     
-    // Show success message
     showToast(`${newItem.name} added successfully!`, 'success');
   });
   
-  // Search functionality
   searchInput.addEventListener('input', (e) => {
     filterItems();
   });
   
-  // Filter functionality
   filterCategory.addEventListener('change', filterItems);
   filterCondition.addEventListener('change', filterItems);
   availableOnlyCheckbox.addEventListener('change', filterItems);
   
-  // Price range sliders
   priceMinSlider.addEventListener('input', updatePriceRange);
   priceMaxSlider.addEventListener('input', updatePriceRange);
   
@@ -157,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     filterItems();
   }
   
-  // Reset filters
   resetFiltersBtn.addEventListener('click', () => {
     searchInput.value = '';
     filterCategory.value = 'all';
@@ -169,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
     displayItems(items);
   });
   
-  // Filter items function
   function filterItems() {
     const searchTerm = searchInput.value.toLowerCase();
     const selectedCategory = filterCategory.value;
@@ -179,22 +162,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const availableOnly = availableOnlyCheckbox.checked;
     
     const filteredItems = items.filter(item => {
-      // Search filter
       const matchesSearch = searchTerm === '' || 
         item.name.toLowerCase().includes(searchTerm) ||
         item.owner.toLowerCase().includes(searchTerm) ||
         item.description.toLowerCase().includes(searchTerm);
-      
-      // Category filter
+
       const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-      
-      // Condition filter
       const matchesCondition = selectedCondition === 'any' || item.condition === selectedCondition;
       
-      // Price filter
       const matchesPrice = item.rentAmount >= minPrice && item.rentAmount <= maxPrice;
       
-      // Availability filter
       const matchesAvailability = !availableOnly || item.available;
       
       return matchesSearch && matchesCategory && matchesCondition && matchesPrice && matchesAvailability;
@@ -203,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
     displayItems(filteredItems);
   }
   
-  // Display items function
   function displayItems(itemsToDisplay) {
     itemsCount.querySelector('span').textContent = itemsToDisplay.length;
     
@@ -265,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('');
   }
   
-  // Global function for requesting items
   window.requestItem = function(itemId) {
     const item = items.find(i => i.id === itemId);
     if (item && item.available) {
@@ -273,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   
-  // Helper function to format date
   function formatDate(date) {
     const options = { weekday: 'short', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
