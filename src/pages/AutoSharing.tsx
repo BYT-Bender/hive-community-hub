@@ -36,11 +36,10 @@ const AutoSharing = () => {
   const [filters, setFilters] = useState({
     startLocation: "",
     destination: "",
-    vehicleType: "all", // Changed from empty string to "all"
-    day: "any" // Changed from empty string to "any"
+    vehicleType: "all",
+    day: "any"
   });
   
-  // Load shares from localStorage or use mock data on component mount
   useEffect(() => {
     const savedShares = getFromLocalStorage<AutoShare[]>(STORAGE_KEYS.AUTO_SHARES, []);
     if (savedShares.length > 0) {
@@ -51,7 +50,6 @@ const AutoSharing = () => {
     }
   }, []);
   
-  // Save shares to localStorage whenever they change
   useEffect(() => {
     if (shares.length > 0) {
       saveToLocalStorage(STORAGE_KEYS.AUTO_SHARES, shares);
@@ -87,8 +85,8 @@ const AutoSharing = () => {
     setFilters({
       startLocation: "",
       destination: "",
-      vehicleType: "all", // Changed from empty string to "all"
-      day: "any" // Changed from empty string to "any"
+      vehicleType: "all",
+      day: "any"
     });
   };
   
@@ -109,7 +107,6 @@ const AutoSharing = () => {
     
     setShares(prev => [autoShare, ...prev]);
     
-    // Reset form
     setNewShare({
       userId: "user-" + Date.now(),
       userName: "",
@@ -132,22 +129,18 @@ const AutoSharing = () => {
   };
   
   const filteredShares = shares.filter(share => {
-    // Apply start location filter
     if (filters.startLocation && !share.startLocation.toLowerCase().includes(filters.startLocation.toLowerCase())) {
       return false;
     }
     
-    // Apply destination filter
     if (filters.destination && !share.destination.toLowerCase().includes(filters.destination.toLowerCase())) {
       return false;
     }
     
-    // Apply vehicle type filter
     if (filters.vehicleType && filters.vehicleType !== "all" && share.vehicleType !== filters.vehicleType) {
       return false;
     }
     
-    // Apply day filter
     if (filters.day && filters.day !== "any" && !share.days.includes(filters.day)) {
       return false;
     }
@@ -163,7 +156,6 @@ const AutoSharing = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left sidebar - Filters & Add Route */}
         <div className="lg:col-span-1 space-y-6">
           <Button 
             onClick={() => setShowAddForm(!showAddForm)} 
@@ -172,7 +164,6 @@ const AutoSharing = () => {
             {showAddForm ? "Cancel" : "Add New Route"}
           </Button>
           
-          {/* Add Route Form */}
           {showAddForm && (
             <Card>
               <CardHeader>
@@ -313,7 +304,6 @@ const AutoSharing = () => {
             </Card>
           )}
           
-          {/* Filter Card */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle>Filters</CardTitle>
@@ -380,7 +370,6 @@ const AutoSharing = () => {
           </Card>
         </div>
         
-        {/* Main content - Routes List */}
         <div className="lg:col-span-2">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">Available Routes</h2>
@@ -401,7 +390,6 @@ const AutoSharing = () => {
                 <Card key={share.id}>
                   <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row gap-6">
-                      {/* Left side - route info */}
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-4">
                           <Badge variant={share.vehicleType === 'Car' ? 'default' : 'secondary'}>
@@ -464,7 +452,6 @@ const AutoSharing = () => {
                         </div>
                       </div>
                       
-                      {/* Right side - actions */}
                       <div className="flex flex-row md:flex-col justify-center md:justify-start gap-2">
                         <Button className="w-full">Contact</Button>
                         <Button variant="outline" className="w-full">Join Route</Button>
