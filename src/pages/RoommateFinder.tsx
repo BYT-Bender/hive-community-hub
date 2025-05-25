@@ -24,19 +24,17 @@ const RoommateFinder = () => {
   });
 
   const [filters, setFilters] = useState({
-    location: "all", // Changed from empty string to "all"
+    location: "all",
     minBudget: 500,
     maxBudget: 2000,
-    gender: "any" // Changed from empty string to "any"
+    gender: "any"
   });
   
   const [roommates, setRoommates] = useState<Array<User & RoommatePreference>>([]);
   const [matches, setMatches] = useState<Array<User & RoommatePreference>>([]);
   const [showForm, setShowForm] = useState(true);
   
-  // Load mock data on component mount
   useEffect(() => {
-    // Combine user and preference data
     const combinedData = mockUsers.map(user => {
       const preference = mockRoommatePreferences.find(pref => pref.userId === user.id);
       return { ...user, ...preference };
@@ -44,12 +42,10 @@ const RoommateFinder = () => {
     
     setRoommates(combinedData);
     
-    // Check if user profile exists in localStorage
     const savedProfile = getFromLocalStorage<RoommateFormData | null>(STORAGE_KEYS.USER_PROFILE, null);
     if (savedProfile) {
       setFormData(savedProfile);
       setShowForm(false);
-      // Find matches for the saved profile
       findMatches(savedProfile);
     }
   }, []);
@@ -75,7 +71,6 @@ const RoommateFinder = () => {
 
   const applyFilters = (currentFilters: typeof filters) => {
     const filtered = roommates.filter(roommate => {
-      // Skip filtering if no roommate preferences
       if (!roommate.budget || !roommate.location) return false;
       
       const locationMatch = !currentFilters.location || currentFilters.location === "all" || roommate.location.toLowerCase().includes(currentFilters.location.toLowerCase());
@@ -89,18 +84,10 @@ const RoommateFinder = () => {
   };
 
   const findMatches = (profile: RoommateFormData) => {
-    // Simple matching algorithm
     const matched = roommates.filter(roommate => {
-      // Skip filtering if no roommate preferences
       if (!roommate.budget || !roommate.location) return false;
-      
-      // Match by budget range (±20%)
       const budgetMatch = Math.abs(roommate.budget - profile.budget) / profile.budget <= 0.2;
-      
-      // Match by location
       const locationMatch = roommate.location.toLowerCase() === profile.location.toLowerCase();
-      
-      // Match by at least one common interest
       const userInterests = profile.interests.toLowerCase().split(',').map(i => i.trim());
       const commonInterests = roommate.interests.some(interest => 
         userInterests.some(userInterest => interest.toLowerCase().includes(userInterest))
@@ -114,16 +101,9 @@ const RoommateFinder = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Save profile to localStorage
     saveToLocalStorage(STORAGE_KEYS.USER_PROFILE, formData);
-    
-    // Find matches
     findMatches(formData);
-    
-    // Hide form and show results
     setShowForm(false);
-    
     toast({
       title: "Profile Saved",
       description: "Your roommate preferences have been saved and matches have been found!",
@@ -138,7 +118,6 @@ const RoommateFinder = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left sidebar - Form or Profile */}
         <div className="lg:col-span-1">
           <Card>
             {showForm ? (
@@ -380,7 +359,6 @@ const RoommateFinder = () => {
           )}
         </div>
         
-        {/* Main content - Matches */}
         <div className="lg:col-span-2">
           {!showForm ? (
             <>
