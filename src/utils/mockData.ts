@@ -6,7 +6,7 @@ import { RentItem } from "@/types/rent";
 import { AutoShare } from "@/types/auto";
 import { GamePartner } from "@/types/game";
 
-// Mock Users
+
 export const mockUsers: User[] = [
   {
     id: '1',
@@ -50,7 +50,6 @@ export const mockUsers: User[] = [
   }
 ];
 
-// Mock Roommate Preferences
 export const mockRoommatePreferences: RoommatePreference[] = [
   {
     id: '1',
@@ -94,7 +93,6 @@ export const mockRoommatePreferences: RoommatePreference[] = [
   }
 ];
 
-// Mock Cart Items
 export const mockCartItems: CartItem[] = [
   {
     id: '1',
@@ -143,7 +141,6 @@ export const mockCartItems: CartItem[] = [
   }
 ];
 
-// Mock Rent Items
 export const mockRentItems: RentItem[] = [
   {
     id: '1',
@@ -212,7 +209,6 @@ export const mockRentItems: RentItem[] = [
   }
 ];
 
-// Mock Auto Shares
 export const mockAutoShares: AutoShare[] = [
   {
     id: '1',
@@ -281,7 +277,6 @@ export const mockAutoShares: AutoShare[] = [
   }
 ];
 
-// Mock Game Partners
 export const mockGamePartners: GamePartner[] = [
   {
     id: '1',
@@ -334,3 +329,4 @@ export const mockGamePartners: GamePartner[] = [
     bio: 'Love card games and bar games. Always up for a friendly match!'
   }
 ];
+
