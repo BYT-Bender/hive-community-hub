@@ -1,6 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Elements
   const addItemForm = document.getElementById('add-item-form');
   const cartItemsContainer = document.getElementById('cart-items-container');
   const totalItemsEl = document.getElementById('total-items');
@@ -12,11 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchItemsInput = document.getElementById('search-items');
   const filterButtons = document.querySelectorAll('.filter-btn');
   
-  // State
   let currentFilter = 'all';
   let searchTerm = '';
   
-  // Sample data for cart items
   const mockItems = [
     {
       id: 'item-1',
@@ -64,13 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
   
-  // Load items from localStorage or use mock data
   let cartItems = getFromLocalStorage(STORAGE_KEYS.CART_ITEMS, mockItems);
-  
-  // Display items and update summary on page load
   updateCart();
   
-  // Form submission
   addItemForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -86,25 +79,17 @@ document.addEventListener('DOMContentLoaded', () => {
       createdAt: new Date()
     };
     
-    // Add to cart items
     cartItems = [newItem, ...cartItems];
-    
-    // Save to localStorage
     saveToLocalStorage(STORAGE_KEYS.CART_ITEMS, cartItems);
-    
-    // Update UI
     updateCart();
     
-    // Reset form
     addItemForm.reset();
     document.getElementById('item-quantity').value = '1';
     document.getElementById('item-price').value = '0';
     
-    // Show success message
     showToast(`${newItem.name} added to cart!`, 'success');
   });
   
-  // Clear purchased items
   clearPurchasedBtn.addEventListener('click', () => {
     const purchasedCount = cartItems.filter(item => item.completed).length;
     
@@ -120,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Purchased items cleared', 'success');
   });
   
-  // Reset cart to default
   resetCartBtn.addEventListener('click', () => {
     cartItems = [...mockItems];
     saveToLocalStorage(STORAGE_KEYS.CART_ITEMS, cartItems);
@@ -140,13 +124,11 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Cart reset to default', 'info');
   });
   
-  // Search items
   searchItemsInput.addEventListener('input', (e) => {
     searchTerm = e.target.value.toLowerCase();
     updateCart();
   });
   
-  // Filter buttons
   filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       filterButtons.forEach(b => b.classList.remove('active'));
@@ -156,15 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  // Update cart function
   function updateCart() {
-    // Apply filters and search
     const filteredItems = cartItems.filter(item => {
-      // Filter by status
       if (currentFilter === 'pending' && item.completed) return false;
       if (currentFilter === 'completed' && !item.completed) return false;
-      
-      // Filter by search term
       if (searchTerm && !item.name.toLowerCase().includes(searchTerm) && 
           !item.addedBy.toLowerCase().includes(searchTerm) && 
           !item.notes.toLowerCase().includes(searchTerm) && 
@@ -175,14 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return true;
     });
     
-    // Display items
     displayItems(filteredItems);
-    
-    // Update summary
     updateSummary();
   }
   
-  // Display items function
   function displayItems(items) {
     if (items.length === 0) {
       cartItemsContainer.innerHTML = `
@@ -201,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const totalPrice = (item.price * item.quantity).toFixed(2);
       const formattedDate = formatDate(new Date(item.createdAt));
       
-      // Get icon for category
       let categoryIcon;
       switch(item.category) {
         case 'grocery':
@@ -252,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }).join('');
     
-    // Add event listeners to checkboxes
     document.querySelectorAll('.cart-item-check input').forEach(checkbox => {
       checkbox.addEventListener('change', () => {
         const itemId = checkbox.getAttribute('data-id');
@@ -260,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
     
-    // Add event listeners to delete buttons
     document.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const itemId = btn.getAttribute('data-id');
@@ -269,7 +239,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Update summary function
   function updateSummary() {
     const totalItems = cartItems.length;
     const purchasedItems = cartItems.filter(item => item.completed).length;
@@ -285,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
     totalPriceEl.textContent = `$${totalPrice.toFixed(2)}`;
   }
   
-  // Toggle item status function
   function toggleItemStatus(itemId) {
     cartItems = cartItems.map(item => {
       if (item.id === itemId) {
@@ -298,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCart();
   }
   
-  // Delete item function
   function deleteItem(itemId) {
     const itemToDelete = cartItems.find(item => item.id === itemId);
     
@@ -309,13 +276,11 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast(`${itemToDelete.name} removed from cart`, 'info');
   }
   
-  // Helper function to format date
   function formatDate(date) {
     const options = { weekday: 'short', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
   }
   
-  // Helper function to get category name
   function getCategoryName(category) {
     switch(category) {
       case 'grocery':
