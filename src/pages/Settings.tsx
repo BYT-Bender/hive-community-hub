@@ -28,7 +28,7 @@ const Settings = () => {
           .eq("id", user.id)
           .single();
           
-        if (error && error.code !== 'PGRST116') { // PGRST116 is "not found" error
+        if (error && error.code !== 'PGRST116') {
           throw error;
         }
         
