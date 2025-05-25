@@ -28,9 +28,9 @@ const GamePartnerFinder = () => {
   });
   
   const [filters, setFilters] = useState({
-    game: "all", // Changed from empty string to "all"
-    skillLevel: "any", // Changed from empty string to "any"
-    availability: "any" // Changed from empty string to "any"
+    game: "all",
+    skillLevel: "any",
+    availability: "any"
   });
   
   const [newGame, setNewGame] = useState("");
@@ -41,7 +41,6 @@ const GamePartnerFinder = () => {
   const skillLevels = ["Beginner", "Intermediate", "Expert", "Professional"];
   const availabilityOptions = ["Weekday mornings", "Weekday afternoons", "Weekday evenings", "Weekend mornings", "Weekend afternoons", "Weekend evenings"];
   
-  // Load partners from localStorage or use mock data on component mount
   useEffect(() => {
     const savedPartners = getFromLocalStorage<GamePartner[]>(STORAGE_KEYS.GAME_PARTNERS, []);
     if (savedPartners.length > 0) {
@@ -52,7 +51,6 @@ const GamePartnerFinder = () => {
     }
   }, []);
   
-  // Save partners to localStorage whenever they change
   useEffect(() => {
     if (partners.length > 0) {
       saveToLocalStorage(STORAGE_KEYS.GAME_PARTNERS, partners);
@@ -109,9 +107,9 @@ const GamePartnerFinder = () => {
   
   const resetFilters = () => {
     setFilters({
-      game: "all", // Changed from empty string to "all"
-      skillLevel: "any", // Changed from empty string to "any"
-      availability: "any" // Changed from empty string to "any"
+      game: "all",
+      skillLevel: "any",
+      availability: "any"
     });
     setSearchTerm("");
   };
@@ -139,7 +137,6 @@ const GamePartnerFinder = () => {
     
     setPartners(prev => [gamePartner, ...prev]);
     
-    // Reset form
     setNewPartner({
       userId: "user-" + Date.now(),
       userName: "",
@@ -159,36 +156,30 @@ const GamePartnerFinder = () => {
   };
   
   const filteredPartners = partners.filter(partner => {
-    // Apply search term to name or bio
     if (searchTerm && 
         !partner.userName.toLowerCase().includes(searchTerm.toLowerCase()) && 
         !partner.bio.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
     
-    // Apply game filter
     if (filters.game && filters.game !== "all" && !partner.games.some(game => game.toLowerCase() === filters.game.toLowerCase())) {
       return false;
     }
     
-    // Apply skill level filter
     if (filters.skillLevel && filters.skillLevel !== "any") {
       const gameIndex = filters.game !== "all" ? partner.games.findIndex(g => g.toLowerCase() === filters.game.toLowerCase()) : -1;
       
       if (gameIndex === -1) {
-        // If no specific game is selected, check if any game has the selected skill level
         if (!partner.skillLevels.some(skill => skill === filters.skillLevel)) {
           return false;
         }
       } else {
-        // If a specific game is selected, check if that game has the selected skill level
         if (partner.skillLevels[gameIndex] !== filters.skillLevel) {
           return false;
         }
       }
     }
     
-    // Apply availability filter
     if (filters.availability && filters.availability !== "any" && !partner.availability.includes(filters.availability)) {
       return false;
     }
@@ -204,9 +195,7 @@ const GamePartnerFinder = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left sidebar - Filters & Add Profile */}
         <div className="lg:col-span-1 space-y-6">
-          {/* Search & Add Profile */}
           <div className="grid grid-cols-1 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -223,7 +212,6 @@ const GamePartnerFinder = () => {
             </Button>
           </div>
           
-          {/* Add Profile Form */}
           {showAddForm && (
             <Card>
               <CardHeader>
@@ -247,7 +235,6 @@ const GamePartnerFinder = () => {
                 <div className="space-y-2">
                   <Label>Games & Skill Levels</Label>
                   
-                  {/* Current games */}
                   <div className="space-y-2">
                     {newPartner.games?.map((game, index) => (
                       <div key={index} className="flex items-center gap-2">
@@ -279,7 +266,6 @@ const GamePartnerFinder = () => {
                     ))}
                   </div>
                   
-                  {/* Add new game */}
                   <div className="flex items-center gap-2">
                     <div className="flex-1">
                       <Select 
@@ -358,7 +344,6 @@ const GamePartnerFinder = () => {
             </Card>
           )}
           
-          {/* Filter Card */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle>Filters</CardTitle>
@@ -425,7 +410,6 @@ const GamePartnerFinder = () => {
           </Card>
         </div>
         
-        {/* Main content - Game Partners */}
         <div className="lg:col-span-2">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">Game Partners</h2>
