@@ -1,9 +1,3 @@
-
-/**
- * Utility functions for working with localStorage
- */
-
-// Generic function to save data to localStorage
 export const saveToLocalStorage = <T>(key: string, data: T): void => {
   try {
     localStorage.setItem(key, JSON.stringify(data));
@@ -12,7 +6,7 @@ export const saveToLocalStorage = <T>(key: string, data: T): void => {
   }
 };
 
-// Generic function to get data from localStorage
+
 export const getFromLocalStorage = <T>(key: string, defaultValue: T): T => {
   try {
     const item = localStorage.getItem(key);
@@ -23,7 +17,7 @@ export const getFromLocalStorage = <T>(key: string, defaultValue: T): T => {
   }
 };
 
-// Remove item from localStorage
+
 export const removeFromLocalStorage = (key: string): void => {
   try {
     localStorage.removeItem(key);
@@ -32,7 +26,6 @@ export const removeFromLocalStorage = (key: string): void => {
   }
 };
 
-// Clear all HIVE data from localStorage
 export const clearAllHiveData = (): void => {
   try {
     const keys = Object.keys(localStorage);
@@ -46,7 +39,6 @@ export const clearAllHiveData = (): void => {
   }
 };
 
-// Storage keys
 export const STORAGE_KEYS = {
   ROOMMATES: 'hive_roommates',
   CART_ITEMS: 'hive_cart_items',
