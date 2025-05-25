@@ -1,5 +1,3 @@
-
-// Storage utilities for all features
 const STORAGE_KEYS = {
   USER_PROFILE: 'hive-user-profile',
   RENT_ITEMS: 'hive-rent-items',
@@ -9,7 +7,6 @@ const STORAGE_KEYS = {
   GAME_PROFILE: 'hive-game-profile'
 };
 
-// Save data to localStorage
 function saveToLocalStorage(key, data) {
   try {
     localStorage.setItem(key, JSON.stringify(data));
@@ -18,7 +15,6 @@ function saveToLocalStorage(key, data) {
   }
 }
 
-// Get data from localStorage
 function getFromLocalStorage(key, defaultValue = null) {
   try {
     const item = localStorage.getItem(key);
@@ -29,7 +25,6 @@ function getFromLocalStorage(key, defaultValue = null) {
   }
 }
 
-// Clear specific storage key
 function clearFromLocalStorage(key) {
   try {
     localStorage.removeItem(key);
