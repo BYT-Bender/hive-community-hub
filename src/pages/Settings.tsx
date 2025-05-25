@@ -23,18 +23,21 @@ const Settings = () => {
       try {
         setLoading(true);
         const { data, error } = await supabase
-          .from("profiles")
+          .from("profiles" as any)
           .select("username, avatar_url")
           .eq("id", user.id)
           .single();
           
-        if (error) throw error;
+        if (error && error.code !== 'PGRST116') { // PGRST116 is "not found" error
+          throw error;
+        }
         
         if (data) {
           setUsername(data.username || "");
           setAvatarUrl(data.avatar_url || "");
         }
       } catch (error: any) {
+        console.error("Error fetching profile:", error);
         toast({
           title: "Error fetching profile",
           description: error.message,
@@ -55,13 +58,13 @@ const Settings = () => {
       setLoading(true);
       
       const { error } = await supabase
-        .from("profiles")
-        .update({
+        .from("profiles" as any)
+        .upsert({
+          id: user.id,
           username,
           avatar_url: avatarUrl,
-          updated_at: new Date().toISOString(), // Convert Date object to ISO string
-        })
-        .eq("id", user.id);
+          updated_at: new Date().toISOString(),
+        });
         
       if (error) throw error;
       
@@ -70,6 +73,7 @@ const Settings = () => {
         description: "Your profile has been updated successfully.",
       });
     } catch (error: any) {
+      console.error("Error updating profile:", error);
       toast({
         title: "Error updating profile",
         description: error.message,
