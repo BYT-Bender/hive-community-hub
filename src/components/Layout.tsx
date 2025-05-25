@@ -48,7 +48,6 @@ const Layout = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div 
@@ -58,7 +57,6 @@ const Layout = () => {
             HIVE
           </div>
           
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => (
               <div
@@ -90,7 +88,6 @@ const Layout = () => {
               </Button>
             )}
             
-            {/* Auth Button for non-authenticated users */}
             {!user && (
               <Button
                 variant="outline"
@@ -102,7 +99,6 @@ const Layout = () => {
               </Button>
             )}
             
-            {/* Mobile Menu Button */}
             <Button 
               variant="ghost" 
               size="icon" 
@@ -114,7 +110,6 @@ const Layout = () => {
           </div>
         </div>
         
-        {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="md:hidden border-t">
             <div className="container mx-auto px-4 py-3 space-y-2">
@@ -159,12 +154,10 @@ const Layout = () => {
         )}
       </header>
       
-      {/* Main Content */}
       <main className="flex-grow bg-gray-50">
         <Outlet />
       </main>
       
-      {/* Footer */}
       <footer className="bg-white border-t py-6">
         <div className="container mx-auto px-4 text-center text-sm text-gray-500">
           <p>© {new Date().getFullYear()} HIVE Community Hub. All rights reserved.</p>
