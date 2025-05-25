@@ -32,10 +32,10 @@ const ItemRenting = () => {
   });
   
   const [filters, setFilters] = useState({
-    category: "all", // Changed from empty string to "all"
+    category: "all",
     minPrice: 0,
     maxPrice: 100,
-    condition: "any", // Changed from empty string to "any"
+    condition: "any",
     available: true
   });
   
@@ -45,7 +45,6 @@ const ItemRenting = () => {
   const conditions = ["Excellent", "Very Good", "Good", "Fair", "Poor"];
   const durations = ["Hour", "Day", "Weekend", "Week", "Month"];
   
-  // Load items from localStorage or use mock data on component mount
   useEffect(() => {
     const savedItems = getFromLocalStorage<RentItem[]>(STORAGE_KEYS.RENT_ITEMS, []);
     if (savedItems.length > 0) {
@@ -56,7 +55,6 @@ const ItemRenting = () => {
     }
   }, []);
   
-  // Save items to localStorage whenever they change
   useEffect(() => {
     if (items.length > 0) {
       saveToLocalStorage(STORAGE_KEYS.RENT_ITEMS, items);
@@ -86,10 +84,10 @@ const ItemRenting = () => {
   
   const resetFilters = () => {
     setFilters({
-      category: "all", // Changed from empty string to "all"
+      category: "all",
       minPrice: 0,
       maxPrice: 100,
-      condition: "any", // Changed from empty string to "any"
+      condition: "any",
       available: true
     });
     setSearchTerm("");
@@ -105,7 +103,6 @@ const ItemRenting = () => {
       return;
     }
     
-    // If no image is provided, use a placeholder based on category
     const imageUrl = newItem.imageUrl || `https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80`;
     
     const rentItem: RentItem = {
@@ -116,7 +113,6 @@ const ItemRenting = () => {
     
     setItems(prev => [rentItem, ...prev]);
     
-    // Reset form
     setNewItem({
       name: "",
       ownerId: "user-" + Date.now(),
@@ -147,28 +143,23 @@ const ItemRenting = () => {
   };
   
   const filteredItems = items.filter(item => {
-    // Apply search term
     if (searchTerm && !item.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
         !item.description.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
     
-    // Apply category filter
     if (filters.category && filters.category !== "all" && item.category !== filters.category) {
       return false;
     }
     
-    // Apply price filter
     if (item.rentAmount < filters.minPrice || item.rentAmount > filters.maxPrice) {
       return false;
     }
     
-    // Apply condition filter
     if (filters.condition && filters.condition !== "any" && item.condition !== filters.condition) {
       return false;
     }
     
-    // Apply availability filter
     if (filters.available && !item.available) {
       return false;
     }
@@ -184,9 +175,7 @@ const ItemRenting = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left sidebar - Filters & Add Item */}
         <div className="lg:col-span-1 space-y-6">
-          {/* Search & Add Item buttons */}
           <div className="grid grid-cols-1 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -203,7 +192,6 @@ const ItemRenting = () => {
             </Button>
           </div>
           
-          {/* Add Item Form */}
           {showAddForm && (
             <Card>
               <CardHeader>
@@ -332,8 +320,7 @@ const ItemRenting = () => {
               </CardFooter>
             </Card>
           )}
-          
-          {/* Filter Card */}
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle>Filters</CardTitle>
@@ -410,7 +397,6 @@ const ItemRenting = () => {
           </Card>
         </div>
         
-        {/* Main content - Item Grid */}
         <div className="lg:col-span-2">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">Available Items</h2>
