@@ -19,9 +19,8 @@ const CommonCart = () => {
     price: 0,
     addedBy: ""
   });
-  const [filter, setFilter] = useState("all"); // all, pending, completed
+  const [filter, setFilter] = useState("all");
 
-  // Load items from localStorage or use mock data on component mount
   useEffect(() => {
     const savedItems = getFromLocalStorage<CartItem[]>(STORAGE_KEYS.CART_ITEMS, []);
     if (savedItems.length > 0) {
@@ -32,7 +31,6 @@ const CommonCart = () => {
     }
   }, []);
 
-  // Save items to localStorage whenever they change
   useEffect(() => {
     if (items.length > 0) {
       saveToLocalStorage(STORAGE_KEYS.CART_ITEMS, items);
@@ -128,7 +126,6 @@ const CommonCart = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left sidebar - Add item form */}
         <div className="lg:col-span-1">
           <Card>
             <CardHeader>
@@ -233,7 +230,6 @@ const CommonCart = () => {
           </Card>
         </div>
         
-        {/* Main content - Shopping list */}
         <div className="lg:col-span-2">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">Shopping List</h2>
